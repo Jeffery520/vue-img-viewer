@@ -543,6 +543,50 @@ export default {
   },
 }
 </script>
+@font-face {font-family: "iconfont_s";
+  src: url('//at.alicdn.com/t/font_1239600_7r0qv8bues.woff?t=1566288082987') format('woff'),
+  url('//at.alicdn.com/t/font_1239600_7r0qv8bues.svg?t=1566288082987#iconfont_s') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont_s {
+  font-family: "iconfont_s" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-zhongzhi:before {
+  content: "\e767";
+}
+
+.icon-xuanzhuan-r:before {
+  content: "\e600";
+}
+
+.icon-guanbi:before {
+  content: "\e654";
+}
+
+.icon-shangyizhang:before {
+  content: "\e655";
+}
+
+.icon-xiayizhang_plugin_view:before {
+  content: "\e656";
+}
+
+.icon-actionicon:before {
+  content: "\e660";
+}
+
+.icon-suoxiao:before {
+  content: "\e661";
+}
+
+.icon-xuanzhuan:before {
+  content: "\e60d";
+}
 
 <style lang="scss" scoped>
 .icon {

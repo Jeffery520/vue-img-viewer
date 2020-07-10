@@ -19,19 +19,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AnaniZhu/vue-img-viewer.git"
+    "url": "https://github.com/mercer08/vue-img-viewer.git"
   },
   "keywords": [
     "vue",
     "component",
     "image-preview"
   ],
-  "author": "Annani <https://github.com/AnaniZhu/>",
+  "author": "mercer08 <https://github.com/mercer08/>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/AnaniZhu/vue-img-viewer/issues"
+    "url": "https://github.com/mercer08/vue-img-viewer/issues"
   },
-  "homepage": "https://github.com/AnaniZhu/vue-img-viewer#readme",
+  "homepage": "https://github.com/mercer08/vue-img-viewer#readme",
   "husky": {
     "hooks": {
       "commit-msg": "node ./scripts/commitmsg.validate.js -E HUSKY_GIT_PARAMS"

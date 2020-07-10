@@ -27,18 +27,18 @@
             @wheel="wheelScale">
         </div>
         <div class="pos-tip">{{ currentPosition + 1 }} / {{ totalCount }}</div>
-        <div class="close hover-icon" @click="close"><i class="iconfont icon-guanbi" /></div>
-        <div class="arrow arrow-prev hover-icon" @click="updatePosition(-1)"><i class="iconfont icon-shangyizhang" /></div>
-        <div class="arrow arrow-next hover-icon" @click="updatePosition(1)"><i class="iconfont icon-xiayizhang" /></div>
+        <div class="close hover-icon" @click="close"><i class="iconfont_s icon-guanbi" /></div>
+        <div class="arrow arrow-prev hover-icon" @click="updatePosition(-1)"><i class="iconfont_s icon-shangyizhang" /></div>
+        <div class="arrow arrow-next hover-icon" @click="updatePosition(1)"><i class="iconfont_s icon-xiayizhang" /></div>
         <div class="operate-area">
           <slot name="operate">
-            <i class="iconfont icon-actionicon hover-icon" @click="increaseScale" />
-            <i class="iconfont icon-suoxiao hover-icon" @click="decreaseScale" />
+            <i class="iconfont_s icon-actionicon hover-icon" @click="increaseScale" />
+            <i class="iconfont_s icon-suoxiao hover-icon" @click="decreaseScale" />
             <div class="divide" />
-            <i class="iconfont icon-xuanzhuan hover-icon" @click="leftRotate" />
-            <i class="iconfont icon-xuanzhuan-r hover-icon" @click="rightRotate" />
+            <i class="iconfont_s icon-xuanzhuan hover-icon" @click="leftRotate" />
+            <i class="iconfont_s icon-xuanzhuan-r hover-icon" @click="rightRotate" />
             <div class="divide" />
-            <i class="iconfont icon-zhongzhi hover-icon" @click="onResetClick" />
+            <i class="iconfont_s icon-zhongzhi hover-icon" @click="onResetClick" />
           </slot>
         </div>
         <transition name="fade">
@@ -483,9 +483,51 @@ export default {
   }
 }
 </script>
+@font-face {font-family: "iconfont_s";
+  src: url('//at.alicdn.com/t/font_1239600_7r0qv8bues.woff?t=1566288082987') format('woff'),
+  url('//at.alicdn.com/t/font_1239600_7r0qv8bues.svg?t=1566288082987#iconfont_s') format('svg'); /* iOS 4.1- */
+}
 
-<style lang="scss" scoped>
-@import url('//at.alicdn.com/t/font_1239600_7r0qv8bues.css');
+.iconfont_s {
+  font-family: "iconfont_s" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-zhongzhi:before {
+  content: "\e767";
+}
+
+.icon-xuanzhuan-r:before {
+  content: "\e600";
+}
+
+.icon-guanbi:before {
+  content: "\e654";
+}
+
+.icon-shangyizhang:before {
+  content: "\e655";
+}
+
+.icon-xiayizhang_plugin_view:before {
+  content: "\e656";
+}
+
+.icon-actionicon:before {
+  content: "\e660";
+}
+
+.icon-suoxiao:before {
+  content: "\e661";
+}
+
+.icon-xuanzhuan:before {
+  content: "\e60d";
+}
+
 
 .fade-in-enter-active,
 .fade-in-leave-active {
@@ -559,7 +601,7 @@ export default {
       background-color: rgba(0, 0, 0, 0.3);
     }
 
-    .iconfont {
+    .iconfont_s {
       font-size: 23px;
       font-weight: bold;
     }
@@ -584,7 +626,7 @@ export default {
       right: 0;
     }
 
-    .iconfont {
+    .iconfont_s {
       font-size: 32px;
       font-weight: bold;
     }
@@ -600,10 +642,10 @@ export default {
     background-color: rgba(0, 0, 0, 0.3);
     color: rgba(51, 51, 51, 0.4);
 
-    .iconfont {
+    .iconfont_s {
       font-size: 24px;
 
-      & + .iconfont {
+      & + .iconfont_s {
         margin-left: 24px;
       }
     }

@@ -51,7 +51,7 @@
           <slot name="operate">
             <!-- <i class="icon icon-actionicon hover-icon" @click="increaseScale" /> -->
             <svg
-              class="icon"
+              class="icon hover-icon"
               color="#fff"
               aria-hidden="true"
               @click="increaseScale"
@@ -60,7 +60,7 @@
             </svg>
             <!-- <i class="icon icon-suoxiao hover-icon" @click="decreaseScale" /> -->
             <svg
-              class="icon"
+              class="icon hover-icon"
               color="#fff"
               aria-hidden="true"
               @click="decreaseScale"

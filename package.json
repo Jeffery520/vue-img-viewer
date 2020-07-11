@@ -1,6 +1,6 @@
 {
   "name": "vue-img-viewer2",
-  "version": "1.5.2",
+  "version": "1.5.4",
   "description": "基于 Vue 的轻量级图片预览组件",
   "private": false,
   "main": "dist/index.js",
@@ -85,5 +85,9 @@
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.8.0",
     "yargs": "^14.0.0"
+  },
+  "dependencies": {
+    "element-ui": "^2.13.2",
+    "font-awesome": "^4.7.0"
   }
 }

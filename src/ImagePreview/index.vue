@@ -6,8 +6,7 @@
         v-if="isFirstShow"
         v-show="finallyVisible"
         ref="imagePreview"
-        class="preview-container"
-      >
+        class="preview-container">
         <div class="image-wrapper">
           <slot name="loading" :loading="loading">
             <Snippet v-if="loading" />
@@ -25,72 +24,44 @@
             @error="hideLoading"
             @abort="hideLoading"
             @mousedown="handleImageMouseDown"
-            @wheel="wheelScale"
-          />
+            @wheel="wheelScale">
         </div>
         <div class="pos-tip">{{ currentPosition + 1 }} / {{ totalCount }}</div>
-        <div class="close hover-icon" @click="close">
-          <!-- <i class="icon icon-guanbi" /> -->
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-close"></use>
-          </svg>
-        </div>
-        <div class="arrow arrow-prev hover-icon" @click="updatePosition(-1)">
-          <!-- <i class="icon icon-shangyizhang" /> -->
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-arrow-lift"></use>
-          </svg>
-        </div>
-        <div class="arrow arrow-next hover-icon" @click="updatePosition(1)">
-          <!-- <i class="icon icon-xiayizhang" /> -->
-          <svg class="icon" aria-hidden="true">
-            <use xlink:href="#icon-arrow-right"></use>
-          </svg>
-        </div>
+        <div class="close hover-icon" @click="close"><SvgIcon class="icon" name="guanbi" /></div>
+        <div class="arrow arrow-prev hover-icon" @click="updatePosition(-1)"><SvgIcon class="icon" name="shangyizhang" /></div>
+        <div class="arrow arrow-next hover-icon" @click="updatePosition(1)"><SvgIcon class="icon" name="xiayizhang" /></div>
         <div class="operate-area">
           <slot name="operate">
-            <!-- <i class="icon icon-actionicon hover-icon" @click="increaseScale" /> -->
-            <svg
-              class="icon hover-icon"
-              color="#fff"
-              aria-hidden="true"
-              @click="increaseScale"
-            >
-              <use xlink:href="#icon-fangda"></use>
-            </svg>
-            <!-- <i class="icon icon-suoxiao hover-icon" @click="decreaseScale" /> -->
-            <svg
-              class="icon hover-icon"
-              color="#fff"
-              aria-hidden="true"
-              @click="decreaseScale"
-            >
-              <use xlink:href="#icon-suoxiao"></use>
-            </svg>
-            <!-- <div class="divide" />
-            <i class="icon icon-xuanzhuan hover-icon" @click="leftRotate" />
-            <i class="icon icon-xuanzhuan-r hover-icon" @click="rightRotate" />
+            <SvgIcon class="icon hover-icon" name="actionicon" @click="increaseScale" />
+            <SvgIcon class="icon hover-icon" name="suoxiao" @click="decreaseScale" />
             <div class="divide" />
-            <i class="icon icon-zhongzhi hover-icon" @click="onResetClick" /> -->
+            <SvgIcon class="icon hover-icon" name="xuanzhuan" @click="leftRotate" />
+            <SvgIcon class="icon hover-icon" name="xuanzhuan-r" @click="rightRotate" />
+            <div class="divide" />
+            <SvgIcon class="icon hover-icon" name="zhongzhi" @click="onResetClick" />
+            <div class="divide" />
+            <button class="print_btn" @click="$emit('print')">打印</button>
           </slot>
         </div>
         <transition name="fade">
-          <div :key="scale" :style="scaleTipStyle" class="scale-tip">
+          <div
+            :key="scale"
+            :style="scaleTipStyle"
+            class="scale-tip">
             {{ ~~(scale * 100) }}%
           </div>
         </transition>
       </div>
     </transition>
-    <div v-if="isSlotMode" ref="slotWrapper" @click="handleImgWrapperClick">
-      <slot />
-    </div>
+    <div v-if="isSlotMode" ref="slotWrapper" @click="handleImgWrapperClick"><slot /></div>
   </div>
 </template>
 
 <script>
-import './iconfont.js'
-import Snippet from './Snippet'
-import { forbiddenBodyScroll } from './util'
+import Snippet from './components/Snippet'
+import SvgIcon from './components/SvgIcon'
+
+import { forbiddenBodyScroll, ALERT, validateNumber } from '../util'
 
 const DEFAULT_MAX_SCALE = 5 // 最大放大比例
 const DEFAULT_MIN_SCALE = 0.1 // 最小放大比例
@@ -100,80 +71,74 @@ const DEFAULT_LOADING_DELAY = 300 // 默认 loading 延迟时间 (ms)
 const BASE_SELECTOR = 'img' // 默认选择器
 const DEFAULT_FILTER_FUNCTION = () => true // 插槽模式下，默认过滤函数
 
-const ALERT = (text) => console.error(`Error in vue-img-viewer: ${text}`)
-const validateNumber = (prop) => (val) => {
-  let result = Number.isFinite(+val)
-  if (!result) ALERT(`prop ${prop} 必须为Number类型或者数字字符串`)
-  return result
-}
-
 export default {
   name: 'ImagePreview',
   components: {
     Snippet,
+    SvgIcon
   },
   props: {
     visible: {
       type: Boolean,
-      default: false,
+      default: false
     },
     // 图片地址
     imageUrls: {
       type: Array,
-      default: () => [],
+      default: () => []
     },
     urlMapper: {
       type: Function,
-      default: null,
+      default: null
     },
     // 起始位置
     startPosition: {
       type: Number,
-      default: 0,
+      default: 0
     },
     maxScale: {
       type: [String, Number],
       default: DEFAULT_MAX_SCALE,
-      validator: validateNumber('maxScale'),
+      validator: validateNumber('maxScale')
     },
     minScale: {
       type: [String, Number],
       default: DEFAULT_MIN_SCALE,
-      validator: validateNumber('minScale'),
+      validator: validateNumber('minScale')
     },
     scaleStep: {
       type: [String, Number],
       validator: validateNumber('scaleStep'),
-      default: DEFAULT_STEP,
+      default: DEFAULT_STEP
     },
     angle: {
       type: [String, Number],
       validator: validateNumber('angle'),
-      default: DEFAULT_ANGLE,
+      default: DEFAULT_ANGLE
     },
     includeSelector: {
       type: String,
-      default: '',
+      default: ''
     },
     excludeSelector: {
       type: String,
-      default: '',
+      default: ''
     },
     filter: {
       type: Function,
-      default: DEFAULT_FILTER_FUNCTION,
+      default: DEFAULT_FILTER_FUNCTION
     },
     closeOnPressEscape: {
       type: Boolean,
-      default: true,
+      default: true
     },
     loadingDelay: {
       type: [String, Number],
       default: DEFAULT_LOADING_DELAY,
-      validator: validateNumber('loadingDelay'),
-    },
+      validator: validateNumber('loadingDelay')
+    }
   },
-  data() {
+  data () {
     return {
       isFirstShow: false,
       currentPosition: 0,
@@ -186,72 +151,66 @@ export default {
       aspectRatio: 1,
       position: {
         left: 0,
-        top: 0,
+        top: 0
       },
       mouse: {
         x: 0,
-        y: 0,
-      },
+        y: 0
+      }
     }
   },
   computed: {
-    isSlotMode() {
+    isSlotMode () {
       return !!this.$slots.default
     },
-    innerMaxScale() {
+    innerMaxScale () {
       let maxScale = +this.maxScale
-      return Number.isFinite(maxScale) && maxScale >= 1
-        ? maxScale
-        : DEFAULT_MAX_SCALE
+      return Number.isFinite(maxScale) && maxScale >= 1 ? maxScale : DEFAULT_MAX_SCALE
     },
-    innerMinScale() {
+    innerMinScale () {
       let minScale = +this.minScale
-      return Number.isFinite(minScale) && minScale <= 1 && minScale > 0
-        ? minScale
-        : DEFAULT_MIN_SCALE
+      return Number.isFinite(minScale) && minScale <= 1 && minScale > 0 ? minScale : DEFAULT_MIN_SCALE
     },
-    innerScaleStep() {
+    innerScaleStep () {
       let scaleStep = +this.scaleStep
       return Number.isFinite(scaleStep) ? scaleStep : DEFAULT_STEP
     },
-    innerAngle() {
+    innerAngle () {
       let angle = +this.angle
       return Number.isFinite(angle) ? angle : DEFAULT_ANGLE
     },
     // 根据不同用法生成图片列表
-    finallyImageList() {
+    finallyImageList () {
       return this.isSlotMode
-        ? this.urlMapper
-          ? this.urlList.map(this.urlMapper)
-          : this.urlList
+        ? this.urlMapper ? this.urlList.map(this.urlMapper) : this.urlList
         : this.imageUrls
     },
-    finallyVisible() {
+    finallyVisible () {
       return this.isSlotMode ? this.slotModeVisible : this.visible
     },
-    totalCount() {
+    totalCount () {
       return (this.finallyImageList || []).length
     },
-    imgStyle() {
+    imgStyle () {
       let { left, top } = this.position
       let styleKey = this.aspectRatio > 1 ? 'max-width' : 'max-height'
       return {
         transform: `translate3d(${left}px, ${top}px, 0) scale(${this.scale}) rotate(${this.rotateAngle}deg)`,
-        [styleKey]: '100%',
+        [styleKey]: '100%'
       }
     },
-    scaleTipStyle() {
+    scaleTipStyle () {
       let { left, top } = this.position
       return `transform: translate3d(calc(-50% + ${left}px), calc(-50% + ${top}px), 0)`
-    },
+    }
   },
   watch: {
     visible: {
       immediate: true,
-      handler: 'handleVisible',
+      handler: 'handleVisible'
     },
     slotModeVisible: 'handleVisible',
-    startPosition: function(val, old) {
+    startPosition: function (val, old) {
       this.currentPosition = val
     },
     // 切换图片 src 时触发
@@ -260,7 +219,7 @@ export default {
 
     closeOnPressEscape: {
       immediate: true,
-      handler(val, oldVal) {
+      handler (val, oldVal) {
         if (val) {
           window.addEventListener('keyup', this.handlePressESC)
         }
@@ -268,28 +227,25 @@ export default {
         if (oldVal && !val) {
           window.removeEventListener('keyup', this.handlePressESC)
         }
-      },
-    },
+      }
+    }
   },
-  mounted() {
+  mounted () {
     if (this.isSlotMode) {
       this.imgList = this.queryImgList()
       this.initImgList()
     }
   },
-  beforeDestroy() {
-    this.closeOnPressEscape &&
-      window.removeEventListener('keyup', this.handlePressESC)
+  beforeDestroy () {
+    this.closeOnPressEscape && window.removeEventListener('keyup', this.handlePressESC)
   },
   // 插槽子元素变化时，重新初始化
-  updated() {
+  updated () {
     if (this.isSlotMode) {
       let newImgList = this.queryImgList()
       let equal = false
       if (this.imgList.length === newImgList.length && this.imgList.length) {
-        equal = Array.from(this.imgList).every(
-          (img, index) => img === newImgList[index]
-        )
+        equal = Array.from(this.imgList).every((img, index) => img === newImgList[index])
       }
 
       if (!equal) {
@@ -300,7 +256,7 @@ export default {
   },
   methods: {
     // ==================================== 对外方法 Start =============================================
-    rotate(angle) {
+    rotate (angle) {
       if (typeof angle === 'function') {
         angle = +angle(this.rotateAngle)
       } else {
@@ -309,12 +265,10 @@ export default {
       if (Number.isFinite(angle)) {
         this.rotateAngle = angle
       } else {
-        ALERT(
-          'rotate方法参数必须为一个数字或函数(如果是函数，则该函数的返回值必须为数字)'
-        )
+        ALERT('rotate方法参数必须为一个数字或函数(如果是函数，则该函数的返回值必须为数字)')
       }
     },
-    zoom(zoomRate) {
+    zoom (zoomRate) {
       if (typeof zoomRate === 'function') {
         zoomRate = +zoomRate(this.scale)
       } else {
@@ -323,21 +277,19 @@ export default {
 
       if (Number.isFinite(zoomRate)) {
         // 限制缩放范围在“设定范围之内”
-        if (zoomRate < this.minScale) {
-          this.scale = this.minScale
-        } else if (zoomRate > this.maxScale) {
-          this.scale = this.maxScale
+        if (zoomRate < this.innerMinScale) {
+          this.scale = this.innerMinScale
+        } else if (zoomRate > this.innerMaxScale) {
+          this.scale = this.innerMaxScale
         } else {
           this.scale = zoomRate
         }
         // console.error(`zoom传入的参数(如果是函数，则为函数的返回值)超过设定的缩放范围，该范围为${this.minScale}~${this.maxScale}`)
       } else {
-        ALERT(
-          'zoom方法参数必须为一个数字或函数(如果是函数，则该函数的返回值必须为数字)'
-        )
+        ALERT('zoom方法参数必须为一个数字或函数(如果是函数，则该函数的返回值必须为数字)')
       }
     },
-    reset() {
+    reset () {
       return this.resetImage()
     },
     // ==================================== 对外方法 End =============================================
@@ -348,7 +300,7 @@ export default {
      * excludeSelector: ".img3, .img4"
      * => ".img1:not(.img3):not(.img4), .img2:not(.img3):not(.img4)"
      */
-    parseSelector() {
+    parseSelector () {
       const SPLIT_REG = /\s*,\s*/g
       let includeSelectorList = []
       let excludeSelectorList = []
@@ -360,32 +312,25 @@ export default {
         excludeSelectorList = this.excludeSelector.split(SPLIT_REG)
       }
       let selectorList = includeSelectorList.map((selector) => {
-        let filterSelector = excludeSelectorList.map(
-          (exSelector) => `:not(${exSelector})`
-        )
+        let filterSelector = excludeSelectorList.map(exSelector => `:not(${exSelector})`)
         return BASE_SELECTOR + selector + filterSelector.join('')
       })
       return selectorList.join(', ') || BASE_SELECTOR
     },
-    queryImgList() {
-      let selector =
-        this.filter === DEFAULT_FILTER_FUNCTION
-          ? this.parseSelector()
-          : BASE_SELECTOR
+    queryImgList () {
+      let selector = this.filter === DEFAULT_FILTER_FUNCTION ? this.parseSelector() : BASE_SELECTOR
       let imgList = this.$refs.slotWrapper.querySelectorAll(selector)
       return Array.from(imgList).filter(this.filter)
     },
-    initImgList() {
-      this.imgList.forEach((img) => {
+    initImgList () {
+      this.imgList.forEach(img => {
         img.style.cursor = 'zoom-in'
         this.urlList.push(img.src)
       })
     },
-    handleImgWrapperClick(e) {
+    handleImgWrapperClick (e) {
       if (e.target.tagName === 'IMG') {
-        let index = Array.from(this.imgList).findIndex(
-          (img) => img === e.target
-        )
+        let index = Array.from(this.imgList).findIndex(img => img === e.target)
 
         if (index < 0) return
 
@@ -394,15 +339,16 @@ export default {
         this.resetImage()
       }
     },
-    resetImage() {
+    resetImage () {
       this.scale = 1
+      this.currentPosition = 0
       this.rotateAngle = 0
       this.position = {
         left: 0,
-        top: 0,
+        top: 0
       }
     },
-    handleVisible(visible) {
+    handleVisible (visible) {
       if (visible) {
         if (!this.isFirstShow) {
           this.handleFirstVisible()
@@ -412,7 +358,7 @@ export default {
         this.restoreBody && this.restoreBody()
       }
     },
-    handleFirstVisible() {
+    handleFirstVisible () {
       // dom渲染后，将其插入body中
       this.isFirstShow = true
       this.$nextTick(() => {
@@ -424,17 +370,17 @@ export default {
         this.handleImageSourceChange()
       })
     },
-    initAspectRatio(e) {
+    initAspectRatio (e) {
       let width = e.target.offsetWidth
       let height = e.target.offsetHeight
       this.aspectRatio = width / height
     },
-    handleImageLoad(e) {
+    handleImageLoad (e) {
       this.initAspectRatio(e)
       this.hideLoading()
       this.$emit('imageLoad')
     },
-    updatePosition(next) {
+    updatePosition (next) {
       const _next = this.currentPosition + next
       if (_next >= this.finallyImageList.length) {
         this.currentPosition = 0
@@ -445,56 +391,54 @@ export default {
       }
       this.resetImage()
     },
-    handleImageSourceChange() {
+    handleImageSourceChange () {
       // 等待 dom 渲染之后再取 complete 属性
       this.$nextTick(() => {
-        // 加载未缓存图片时，开启 loading
+      // 加载未缓存图片时，开启 loading
         if (this.$refs.image && !this.$refs.image.complete) {
           this.showLoading()
         }
       })
     },
-    showLoading() {
+    showLoading () {
       clearTimeout(this.loadingTimer)
       this.loadingTimer = setTimeout(() => {
         this.loading = true
       }, this.loadingDelay)
     },
-    hideLoading() {
+    hideLoading () {
       clearTimeout(this.loadingTimer)
       this.loading = false
     },
-    leftRotate() {
+    leftRotate () {
       if (!this.loading) {
         this.rotateAngle -= this.innerAngle
       }
     },
-    rightRotate() {
+    rightRotate () {
       if (!this.loading) {
         this.rotateAngle += this.innerAngle
       }
     },
-    increaseScale() {
-      !this.loading &&
-        this.zoom((scale) => (scale + this.innerScaleStep).toFixed(1)) // 处理精度丢失
+    increaseScale () {
+      !this.loading && this.zoom(scale => (scale + this.innerScaleStep).toFixed(1))// 处理精度丢失
     },
-    decreaseScale() {
-      !this.loading &&
-        this.zoom((scale) => (scale - this.innerScaleStep).toFixed(1)) // 处理精度丢失
+    decreaseScale () {
+      !this.loading && this.zoom(scale => (scale - this.innerScaleStep).toFixed(1)) // 处理精度丢失
     },
-    onResetClick() {
+    onResetClick () {
       !this.loading && this.reset()
     },
     // 图片拽拉
-    handleImageMouseDown(e) {
+    handleImageMouseDown (e) {
       this.mouse = {
         x: e.clientX,
-        y: e.clientY,
+        y: e.clientY
       }
       window.addEventListener('mousemove', this.handleImageMouseMove)
       window.addEventListener('mouseup', this.handleImageMouseUp)
     },
-    handleImageMouseMove(e) {
+    handleImageMouseMove (e) {
       // 移动event的坐标
       let { clientX, clientY } = e
       // 鼠标按下时记录的坐标
@@ -504,29 +448,24 @@ export default {
       let deltaY = clientY - y + this.position.top
       this.mouse = {
         x: clientX,
-        y: clientY,
+        y: clientY
       }
       this.position = {
         left: deltaX,
-        top: deltaY,
+        top: deltaY
       }
     },
-    handleImageMouseUp(e) {
+    handleImageMouseUp (e) {
       window.removeEventListener('mousemove', this.handleImageMouseMove)
       window.removeEventListener('mouseup', this.handleImageMouseUp)
     },
     // 滚轮缩放
-    wheelScale(e) {
+    wheelScale (e) {
       const RATIO = 35 // 实际缩放与缩放偏移量的系数
-      let computedScale = this.scale - e.deltaY / RATIO
-      this.scale =
-        computedScale >= this.innerMinScale
-          ? computedScale <= this.innerMaxScale
-            ? computedScale
-            : this.innerMaxScale
-          : this.innerMinScale
+      let computedScale = this.scale - (e.deltaY / RATIO)
+      this.scale = computedScale >= this.innerMinScale ? computedScale <= this.innerMaxScale ? computedScale : this.innerMaxScale : this.innerMinScale
     },
-    close() {
+    close () {
       if (this.isSlotMode) {
         this.slotModeVisible = false
       } else {
@@ -534,175 +473,16 @@ export default {
       }
       this.resetImage()
     },
-    handlePressESC(e) {
+    handlePressESC (e) {
       let { keyCode, code } = e
       if (this.finallyVisible && (keyCode === 27 || code === 'Escape')) {
         this.close()
       }
-    },
-  },
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
-}
-.fade-in-enter-active,
-.fade-in-leave-active {
-  transition: opacity 0.25s;
-}
-
-.fade-in-enter,
-.fade-in-leave-to {
-  opacity: 0;
-}
-
-.preview-container {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.6);
-  overflow: hidden;
-  user-select: none;
-  z-index: 10000;
-
-  .image-wrapper {
-    position: absolute;
-    left: 0;
-    top: 0;
-    display: flex;
-    width: 100%;
-    height: 100%;
-    justify-content: center;
-    align-items: center;
-    z-index: 0;
-
-    .image {
-      border-radius: 4px;
-      cursor: move;
-      will-change: transform;
-    }
-  }
-
-  .pos-tip {
-    position: absolute;
-    top: 48px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 8px 15px;
-    border-radius: 2px;
-    background-color: rgba(0, 0, 0, 0.15);
-    color: #fff;
-  }
-
-  .hover-icon {
-    color: rgba(255, 255, 255, 0.6);
-    transition: all 0.15s;
-    cursor: pointer;
-
-    &:hover {
-      color: rgba(255, 255, 255, 0.95);
-    }
-  }
-
-  .close {
-    position: absolute;
-    right: 20px;
-    top: 20px;
-    padding: 10px;
-    border-radius: 50%;
-    background-color: rgba(0, 0, 0, 0.15);
-
-    &:hover {
-      background-color: rgba(0, 0, 0, 0.3);
-    }
-
-    .icon {
-      font-size: 23px;
-      font-weight: bold;
-    }
-  }
-
-  .arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    padding: 40px 20px;
-    text-align: center;
-
-    &:hover {
-      background-color: #3d3d3d;
-    }
-
-    &-prev {
-      left: 0;
-    }
-
-    &-next {
-      right: 0;
-    }
-
-    .icon {
-      font-size: 32px;
-      font-weight: bold;
-    }
-  }
-
-  .operate-area {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    padding: 24px 0;
-    text-align: center;
-    background-color: rgba(0, 0, 0, 0.3);
-    color: rgba(51, 51, 51, 0.4);
-
-    .icon {
-      font-size: 24px;
-
-      & + .icon {
-        margin-left: 24px;
-      }
-    }
-
-    .divide {
-      display: inline-block;
-      width: 1px;
-      height: 20px;
-      background-color: #d8d8d8;
-      border-radius: 1px;
-      margin: 0 24px;
-      opacity: 0.5;
-    }
-  }
-
-  .scale-tip {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate3d(-50%, -50%, 0);
-    padding: 8px 15px;
-    border-radius: 2px;
-    background-color: rgba(0, 0, 0, 0.7);
-    color: #d8d8d8;
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .fade-enter-active {
-    transition: opacity 1.5s;
-  }
-
-  .fade-enter {
-    opacity: 1;
-  }
-}
+@import './index.scss';
 </style>

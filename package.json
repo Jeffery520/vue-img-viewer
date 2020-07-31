@@ -1,6 +1,6 @@
 {
   "name": "vue-img-viewer2",
-  "version": "1.5.4",
+  "version": "1.5.6",
   "description": "基于 Vue 的轻量级图片预览组件",
   "private": false,
   "main": "dist/index.js",
@@ -10,7 +10,7 @@
     "prod": "webpack-dev-server --config examples/webpack.config.js",
     "build": "NODE_ENV=production webpack --config webpack.config.js",
     "commit": "git-cz",
-    "changelog": "conventional-changelog -i CHANGELOG.md -s -r 0",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s -r 0",
     "version": "npm run changelog && git add CHANGELOG.md",
     "prepublishOnly": "npm run build"
   },
@@ -19,19 +19,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/mercer08/vue-img-viewer.git"
+    "url": "git+https://github.com/AnaniZhu/vue-img-viewer.git"
   },
   "keywords": [
     "vue",
     "component",
     "image-preview"
   ],
-  "author": "mercer08 <https://github.com/mercer08/>",
+  "author": "Annani <https://github.com/AnaniZhu/>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/mercer08/vue-img-viewer/issues"
+    "url": "https://github.com/AnaniZhu/vue-img-viewer/issues"
   },
-  "homepage": "https://github.com/mercer08/vue-img-viewer#readme",
+  "homepage": "https://github.com/AnaniZhu/vue-img-viewer#readme",
   "husky": {
     "hooks": {
       "commit-msg": "node ./scripts/commitmsg.validate.js -E HUSKY_GIT_PARAMS"
@@ -69,6 +69,7 @@
     "file-loader": "^4.0.0",
     "html-webpack-plugin": "^3.2.0",
     "husky": "^4.2.3",
+    "import-http": "^0.3.1",
     "node-sass": "^4.12.0",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
     "sass": "^1.22.3",
@@ -85,9 +86,5 @@
     "webpack-cli": "^3.3.5",
     "webpack-dev-server": "^3.8.0",
     "yargs": "^14.0.0"
-  },
-  "dependencies": {
-    "element-ui": "^2.13.2",
-    "font-awesome": "^4.7.0"
   }
 }

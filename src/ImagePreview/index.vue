@@ -470,8 +470,11 @@ export default {
       } else {
         this.$emit('update:visible', false)
       }
-      this.currentPosition = 0
       this.resetImage()
+      setTimeout(() => {
+        // reset
+        this.currentPosition = 0
+      })
     },
     handlePressESC (e) {
       let { keyCode, code } = e

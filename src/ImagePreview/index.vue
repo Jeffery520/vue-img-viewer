@@ -341,7 +341,6 @@ export default {
     },
     resetImage () {
       this.scale = 1
-      this.currentPosition = 0
       this.rotateAngle = 0
       this.position = {
         left: 0,
@@ -471,6 +470,7 @@ export default {
       } else {
         this.$emit('update:visible', false)
       }
+      this.currentPosition = 0
       this.resetImage()
     },
     handlePressESC (e) {

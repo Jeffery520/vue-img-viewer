@@ -40,7 +40,7 @@
             <div class="divide" />
             <SvgIcon class="icon hover-icon" name="zhongzhi" @click="onResetClick" />
             <div class="divide" />
-            <button class="print_btn" @click="$emit('print')">打印</button>
+            <button v-show="showPrint" class="print_btn" @click="$emit('print')">打印</button>
           </slot>
         </div>
         <transition name="fade">
@@ -78,6 +78,10 @@ export default {
     SvgIcon
   },
   props: {
+    showPrint: {
+      type: Boolean,
+      default: false
+    },
     visible: {
       type: Boolean,
       default: false
